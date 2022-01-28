@@ -23,8 +23,7 @@ def read_users(
     """
     Retrieve users.
     """
-    users = crud.user.get_multi(db, skip=skip, limit=limit)
-    return users
+    return crud.user.get_multi(db, skip=skip, limit=limit)
 
 
 @router.post("/", response_model=schemas.User)
@@ -71,8 +70,7 @@ def update_user_me(
         user_in.full_name = full_name
     if email is not None:
         user_in.email = email
-    user = crud.user.update(db, db_obj=current_user, obj_in=user_in)
-    return user
+    return crud.user.update(db, db_obj=current_user, obj_in=user_in)
 
 
 @router.get("/me", response_model=schemas.User)

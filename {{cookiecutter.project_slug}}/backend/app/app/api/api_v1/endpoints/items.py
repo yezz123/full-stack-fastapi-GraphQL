@@ -19,13 +19,13 @@ def read_items(
     """
     Retrieve items.
     """
-    if crud.user.is_superuser(current_user):
-        items = crud.item.get_multi(db, skip=skip, limit=limit)
-    else:
-        items = crud.item.get_multi_by_owner(
+    return (
+        crud.item.get_multi(db, skip=skip, limit=limit)
+        if crud.user.is_superuser(current_user)
+        else crud.item.get_multi_by_owner(
             db=db, owner_id=current_user.id, skip=skip, limit=limit
         )
-    return items
+    )
 
 
 @router.post("/", response_model=schemas.Item)
@@ -38,8 +38,9 @@ def create_item(
     """
     Create new item.
     """
-    item = crud.item.create_with_owner(db=db, obj_in=item_in, owner_id=current_user.id)
-    return item
+    return crud.item.create_with_owner(
+        db=db, obj_in=item_in, owner_id=current_user.id
+    )
 
 
 @router.put("/{id}", response_model=schemas.Item)

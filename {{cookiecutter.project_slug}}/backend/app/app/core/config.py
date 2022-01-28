@@ -29,9 +29,7 @@ class Settings(BaseSettings):
 
     @validator("SENTRY_DSN", pre=True)
     def sentry_dsn_can_be_blank(cls, v: str) -> Optional[str]:
-        if len(v) == 0:
-            return None
-        return v
+        return None if not v else v
 
     POSTGRES_SERVER: str
     POSTGRES_USER: str
@@ -61,9 +59,7 @@ class Settings(BaseSettings):
 
     @validator("EMAILS_FROM_NAME")
     def get_project_name(cls, v: Optional[str], values: Dict[str, Any]) -> str:
-        if not v:
-            return values["PROJECT_NAME"]
-        return v
+        return values["PROJECT_NAME"] if not v else v
 
     EMAIL_RESET_TOKEN_EXPIRE_HOURS: int = 48
     EMAIL_TEMPLATES_DIR: str = "/app/app/email-templates/build"
